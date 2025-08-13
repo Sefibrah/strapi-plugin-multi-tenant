@@ -12,9 +12,9 @@ module.exports = async (policyContext, config, { strapi }) => {
         .service('plugin::multi-tenant.user-group')
         .findAllowed(policyContext.state.user.id)
 
-      if (policyContext.request.body?.data) {
+      const requestData = policyContext.request.body?.data
+      if (requestData && (requestData.userGroup != null || requestData[config.attribute]?.userGroup != null)) {
         // don't allow updating a relation if user doesn't own it
-        const requestData = policyContext.request.body?.data
         const requestDataUserGroup = config.attribute
           ? requestData[config.attribute]?.userGroup
           : requestData.userGroup
